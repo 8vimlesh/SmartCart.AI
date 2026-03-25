@@ -1,0 +1,10 @@
+flask
+flask-cors
+requests
+beautifulsoup4
+selenium
+webdriver-manager
+fake-useragent
+pymongo
+python-dotenv
+apscheduler
