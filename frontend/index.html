@@ -895,7 +895,7 @@ function renderProdHdr(avail) {
         '<div class="pstat"><div class="pstat-l">Highest</div><div class="pstat-v" style="color:var(--red)">₹' + maxP.toLocaleString('en-IN') + '</div></div>' +
         '<div class="pstat"><div class="pstat-l">You Save</div><div class="pstat-v" style="color:var(--green)">₹' + (maxP-minP).toLocaleString('en-IN') + '</div></div>' +
         '<div class="pstat"><div class="pstat-l">Average</div><div class="pstat-v">₹' + avgP.toLocaleString('en-IN') + '</div></div>' +
-      '</div>' +
+      '</div>' 
       '<div class="prod-acts">' +
         '<a class="pact" href="/reviews?product=' + encodeURIComponent(cur.name) + '" target="_blank">💬 Reviews</a>' +
         '<div class="pact" onclick="copyLink()">🔗 Share</div>' +
