@@ -810,6 +810,11 @@ async function runSearch() {
     if (demoKey) {
       toast('Live search failed — showing demo data for "' + demoKey + '"', 'warn');
       cur = Object.assign({}, JSON.parse(JSON.stringify(DEMO[demoKey])), { name: demoKey });
+      
+      const bases = {};
+      for (const [k, d] of Object.entries(cur.pf)) if (d.p) bases[k] = d.p;
+      cur.hist = genH(30, bases);
+      
       hidDS.clear();
       sortMode = 'price';
       document.getElementById('sortsel').value = 'price';
@@ -834,6 +839,7 @@ function buildFromAPI(data) {
       ship:  p.freeShip,
       ret:   30,
       stock: !!p.price,
+      url:   p.url,
       disc:  p.discount || (p.price && mrp ? Math.round((1 - p.price / mrp) * 100) : 0),
     };
   }
@@ -978,7 +984,7 @@ function renderWinner(avail) {
       '<div class="w-save-l">VS HIGHEST</div>' +
       '<div class="w-save-v">-₹' + (maxP - bd.p).toLocaleString('en-IN') + '</div>' +
     '</div>' +
-    '<a class="w-btn" href="' + pfc.url + '" target="_blank" style="background:' + pfc.c + ';color:#fff" onclick="toast(\'Opening ' + pfc.n + '…\',\'ok\');return false">Buy on ' + pfc.n + ' →</a>' +
+    '<a class="w-btn" href="' + (bd.url || pfc.url) + '" target="_blank" style="background:' + pfc.c + ';color:#fff" onclick="toast(\'Opening ' + pfc.n + '…\',\'ok\')">Buy on ' + pfc.n + ' →</a>' +
     '</div>';
 }
 
@@ -1052,9 +1058,9 @@ function renderCards(avail) {
         '<div class="pcard-bar"><div class="pcard-bar-f" style="width:' + bw + '%;background:' + pfc.c + '60;border-right:2px solid ' + pfc.c + ';animation-delay:' + (i*.1) + 's"></div></div>' +
         '<div class="pcard-tags">' + tags + '</div>' +
         (d.emi ? '<div style="font-family:var(--mono);font-size:10px;color:var(--ink3);margin-bottom:.5rem">No-cost EMI from ' + d.emi + '</div>' : '') +
-        '<a class="pcard-cta" href="' + pfc.url + '" target="_blank" ' +
+        '<a class="pcard-cta" href="' + (d.url || pfc.url) + '" target="_blank" ' +
           'style="color:' + (isBest?'#fff':pfc.c) + ';background:' + (isBest?pfc.c:'transparent') + ';border-color:' + pfc.c + '60" ' +
-          'onclick="toast(\'Opening ' + pfc.n + '…\',\'ok\');return false">Buy on ' + pfc.n + ' →</a>' +
+          'onclick="toast(\'Opening ' + pfc.n + '…\',\'ok\')">Buy on ' + pfc.n + ' →</a>' +
       '</div></div>';
   }).join('');
 }
@@ -1091,7 +1097,7 @@ function renderTable(avail) {
         '<td style="font-family:var(--mono);font-size:12px;color:#f59e0b">' + stars + ' ' + (d.r||'—') + '</td>' +
         '<td style="font-size:12px;font-weight:700;color:' + (d.ship?'var(--green)':'var(--ink3)') + '">' + (d.ship?'✓ Free':'Paid') + '</td>' +
         '<td style="font-size:11px;color:#7c3aed">' + (d.of && d.of[0] ? d.of[0] : '—') + '</td>' +
-        '<td><a href="' + pfc.url + '" target="_blank" style="display:inline-flex;font-family:var(--head);font-size:11px;font-weight:800;color:' + pfc.c + ';padding:6px 13px;border:2px solid ' + pfc.c + '50;border-radius:6px;text-decoration:none;background:' + pfc.s + '" onclick="toast(\'Opening ' + pfc.n + '…\',\'ok\');return false">Buy →</a></td>' +
+        '<td><a href="' + (d.url || pfc.url) + '" target="_blank" style="display:inline-flex;font-family:var(--head);font-size:11px;font-weight:800;color:' + pfc.c + ';padding:6px 13px;border:2px solid ' + pfc.c + '50;border-radius:6px;text-decoration:none;background:' + pfc.s + '" onclick="toast(\'Opening ' + pfc.n + '…\',\'ok\')">Buy →</a></td>' +
       '</tr>';
     }).join('') + '</tbody></table>';
 }

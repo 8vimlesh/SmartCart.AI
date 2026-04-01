@@ -417,8 +417,8 @@ def process_items(all_items):
             if name and len(name) > len(best_name):
                 best_name = name
 
-            # ── Keep cheapest per platform ────────────
-            if pkey not in platform_data or price < platform_data[pkey]["price"]:
+            # ── Keep most relevant (first) per platform ────────────
+            if pkey not in platform_data:
                 platform_data[pkey] = build_result(
                     pkey, name, price, url, image, source,
                     rating=rating, reviews=reviews
